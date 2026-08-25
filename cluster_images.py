@@ -63,7 +63,7 @@ def main():
     parser.add_argument("--distance-threshold", type=float, default=0.35,
                         help="人脸余弦距离阈值，越小越严格；默认 0.35。")
     parser.add_argument("--min-face-size", type=int, default=40)
-    parser.add_argument("--device", choices=("cpu", "cuda"), default=None)
+    parser.add_argument("--device", choices=("cpu", "cuda", "mps"), default=None)
     args = parser.parse_args()
     paths = image_paths(args.source.expanduser())
     if not paths:
@@ -71,7 +71,14 @@ def main():
     if not 0.05 <= args.distance_threshold <= 0.80:
         raise SystemExit("--distance-threshold 必须在 0.05 到 0.80 之间。")
 
-    device = torch.device(args.device or ("cuda" if torch.cuda.is_available() else "cpu"))
+    if args.device:
+        device = torch.device(args.device)
+    elif torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
     print(f"图片数: {len(paths)} | 设备: {device}")
     print("加载人脸模型（首次运行会自动下载模型权重）...")
     detector = MTCNN(image_size=160, margin=20, min_face_size=args.min_face_size,

@@ -19,7 +19,7 @@ pip install --no-deps facenet-pytorch==2.6.0
 python cluster_images.py --source ~/Pictures --output ./cluster_preview
 ```
 
-默认使用 CPU，第一次运行会自动下载人脸检测和识别模型。可用
+默认会优先使用 CUDA，其次使用 Apple Silicon 的 MPS，最后回退到 CPU；第一次运行会自动下载人脸检测和识别模型。也可以用 `--device cpu|cuda|mps` 手动指定设备。可用
 `--distance-threshold` 调整严格程度：数值越小，分组越严格；默认值为 `0.35`。
 每张照片默认选择最大的人脸作为主人物，多人合照建议单独处理。
 
