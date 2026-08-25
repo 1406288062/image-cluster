@@ -4,3 +4,4 @@ scikit-learn
 pillow
 pillow-heif
 tqdm
+requests

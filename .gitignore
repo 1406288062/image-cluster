@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+cluster_preview*/
+face_cluster*/
+.DS_Store
+
+# Large downloaded model weights are kept locally and referenced in README.
+models/
